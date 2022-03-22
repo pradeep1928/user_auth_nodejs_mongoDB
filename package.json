@@ -1,0 +1,29 @@
+{
+  "name": "user_auth_nodejs_mongodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "supervisor server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pradeep1928/user_auth_nodejs_mongoDB.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pradeep1928/user_auth_nodejs_mongoDB/issues"
+  },
+  "homepage": "https://github.com/pradeep1928/user_auth_nodejs_mongoDB#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.7",
+    "supervisor": "^0.12.0"
+  }
+}
