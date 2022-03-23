@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Authentication using nodejs and mongoDB</title>
+  </head>
+  <body>
+    <h1>login</h1>
+    <form action="POST" id="login_form">
+      <input type="text" name="username" id="nameid" placeholder="name" />
+      <input type="text" name="password" id="passid" placeholder="password" />
+      <input type="submit" value="Submit" id="submitBtn" />
+    </form>
+  </body>
+
+  <script>
+    const form = document.getElementById("login_form");
+    form.addEventListener("submit", loginUser);
+
+    async function loginUser(event) {
+      event.preventDefault();
+      const username = document.getElementById("nameid").value;
+      const password = document.getElementById("passid").value;
+
+      const userData = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password
+        }),
+      }).then((res) => res.json());
+      console.log(userData);
+      if (userData.status === "ok") {
+        console.log("got the token", userData.data); 
+        alert("login successfull");
+      } else {
+        alert(userData.error);
+      }
+    }
+  </script>
+</html>
