@@ -33,8 +33,13 @@
           username,
           password
         })
-      }).then((res) => res.json());
+      }).then((res) => res.json())
       console.log(userData);
+      if (userData.status === 'ok') {
+        alert("successfully registered");
+      } else {
+        alert(userData.error);
+      }
     }
   </script>
 </html>
