@@ -10,7 +10,12 @@
     <h1>Registration</h1>
     <form action="POST" id="reg_form">
       <input type="text" name="username" id="nameid" placeholder="name" />
-      <input type="text" name="password" id="passid" placeholder="password" />
+      <input
+        type="password"
+        name="password"
+        id="passid"
+        placeholder="password"
+      />
       <input type="submit" value="Submit" id="submitBtn" />
     </form>
   </body>
@@ -24,6 +29,7 @@
       const username = document.getElementById("nameid").value;
       const password = document.getElementById("passid").value;
 
+      //fetching the userdata from backend route
       const userData = await fetch("/api/register", {
         method: "POST",
         headers: {
@@ -31,7 +37,7 @@
         },
         body: JSON.stringify({
           username,
-          password
+          password,
         }),
       }).then((res) => res.json());
       console.log(userData);

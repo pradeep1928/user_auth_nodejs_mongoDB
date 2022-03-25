@@ -23,13 +23,14 @@ app.use("/", express.static(path.join(__dirname, "static")));
 
 // User registration
 app.post("/api/register", async (req, res) => {
-  console.log(req.body);
-
   const { username, password: plainTextPassword } = req.body;
+
+  //username validation
   if (!username || typeof username !== "string") {
     return res.json({ status: "error", error: "Invalid username" });
   }
 
+  // password validation 
   if (!plainTextPassword || typeof plainTextPassword !== "string") {
     return res.json({ status: "error", error: "Invalid password" });
   }
@@ -43,6 +44,7 @@ app.post("/api/register", async (req, res) => {
   // password hashing
   const password = await bcrypt.hash(plainTextPassword, 10);
 
+  // creating new user with username and password
   try {
     const response = await User.create({
       username,
@@ -66,17 +68,22 @@ app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username }).lean();
 
+  //checking user should not be blank
   if (!user) {
     return res.json({ status: "error", error: "Invalid username or password" });
   }
 
+  //conparing hash token before login
   if (await bcrypt.compare(password, user.password)) {
     const token = jwt.sign(
       {
         id: user._id,
         username: user.username,
       },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      {
+        expiresIn: 1800
+      }
     );
     return res.json({ status: "ok", data: token });
   }
@@ -89,10 +96,12 @@ app.post("/api/login", async (req, res) => {
 app.post("/api/changepassword", async (req, res) => {
   const { token, newpassword: plainTextPassword } = req.body;
 
+  //password validation. It will check password should not be blank and should be string.
   if (!plainTextPassword || typeof plainTextPassword !== "string") {
     return res.json({ status: "error", error: "Invalid password" });
   }
 
+  // password length should not be less than 6
   if (plainTextPassword.length < 6) {
     return res.json({
       status: "error",
@@ -100,11 +109,11 @@ app.post("/api/changepassword", async (req, res) => {
     });
   }
 
+  //verifying user token and changing password of that perticular user
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
     console.log(user)
     const _id = user.id;
-    console.log(_id);
     const password = await bcrypt.hash(plainTextPassword, 10);
     const newUser = await User.updateOne(
       { _id },
@@ -119,6 +128,9 @@ app.post("/api/changepassword", async (req, res) => {
 });
 
 
+app.get('/', (req, res)=> {
+  res.send('Hey, this is home page');
+})
 
 // listening on port
 const port = process.env.PORT || 8000;
